@@ -94,17 +94,17 @@ This function sets up the Streamlit web application and handles the main workflo
   - This line creates a file uploader widget in the web app, allowing the user to upload a CSV file.
   uploaded_file = st.file_uploader("Upload CSV file", type=["csv"])
   
-  -This line creates a text input field for the user to enter a Google Sheet ID.
+  - This line creates a text input field for the user to enter a Google Sheet ID.
        text_input = st.text_input("Enter the google sheet id 👇", )
        
-  -These lines create interactive widgets for the user to select columns to drop, columns to not transform, fillna strategy, scaler choice, and encoder choice
+  - These lines create interactive widgets for the user to select columns to drop, columns to not transform, fillna strategy, scaler choice, and encoder choice
   columns_to_drop = st.multiselect("Select columns to drop", df.columns)
   columns_to_not_transfrom = st.multiselect("Select columns not to transform", df.columns)
   fillna_strategy = st.selectbox("Select fillna strategy", ["None","mean", "median", "most_frequent"])
   scalerchoice = st.selectbox("Select the type of scaler",["None","MinMax", "Standard", "Robust", "PowerTransformer", "MaxAbs", "Quantile"])
   encoderchoice = st.selectbox("Select the type of Encoder", ["None","Label", "OneHot"])
 
--This section handles Google Sheets authentication. It checks if there's a token file, and if not, it initiates the OAuth2 flow to obtain credentials. The credentials are stored in a token file for future use.
+- This section handles Google Sheets authentication. It checks if there's a token file, and if not, it initiates the OAuth2 flow to obtain credentials. The credentials are stored in a token file for future use.
     credentials = None
     if os.path.exists("token.json"):
         credentials = Credentials.from_authorized_user_file("token.json", SCOPES)
@@ -117,15 +117,15 @@ This function sets up the Streamlit web application and handles the main workflo
         with open("token.json", "w") as token:
             token.write(credentials.to_json())
 
--These lines build a Google Sheets API service client and attempt to fetch values from the specified Google Sheet.
+- These lines build a Google Sheets API service client and attempt to fetch values from the specified Google Sheet.
     try:
         service = build("sheets", "v4", credentials=credentials)
         sheets = service.spreadsheets()
         result = sheets.values().get(spreadsheetId=spreadsheet_id, range="Sheet1").execute()
         values = result.get("values", [])
 
--Then we clear the existing data to upload the new data
--These lines update the Google Sheet with the preprocessed data and display a success message.
+- Then we clear the existing data to upload the new data
+- These lines update the Google Sheet with the preprocessed data and display a success message.
         sheets.values().update(
             spreadsheetId=spreadsheet_id,
             range=range_to_update,
