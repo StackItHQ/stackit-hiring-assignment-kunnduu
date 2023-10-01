@@ -89,51 +89,14 @@ This function takes an input DataFrame, processes it based on user-defined param
 - Re-add the columns that were not transformed back into the preprocessed DataFrame.
 
 ### `main` Function
-
 This function sets up the Streamlit web application and handles the main workflow:
-  - This line creates a file uploader widget in the web app, allowing the user to upload a CSV file.
-  uploaded_file = st.file_uploader("Upload CSV file", type=["csv"])
-  
-  - This line creates a text input field for the user to enter a Google Sheet ID.
-       text_input = st.text_input("Enter the google sheet id 👇", )
-       
-  - These lines create interactive widgets for the user to select columns to drop, columns to not transform, fillna strategy, scaler choice, and encoder choice
-  columns_to_drop = st.multiselect("Select columns to drop", df.columns)
-  columns_to_not_transfrom = st.multiselect("Select columns not to transform", df.columns)
-  fillna_strategy = st.selectbox("Select fillna strategy", ["None","mean", "median", "most_frequent"])
-  scalerchoice = st.selectbox("Select the type of scaler",["None","MinMax", "Standard", "Robust", "PowerTransformer", "MaxAbs", "Quantile"])
-  encoderchoice = st.selectbox("Select the type of Encoder", ["None","Label", "OneHot"])
-
-- This section handles Google Sheets authentication. It checks if there's a token file, and if not, it initiates the OAuth2 flow to obtain credentials. The credentials are stored in a token file for future use.
-    credentials = None
-    if os.path.exists("token.json"):
-        credentials = Credentials.from_authorized_user_file("token.json", SCOPES)
-    if not credentials or not credentials.valid:
-        if credentials and credentials.expired and credentials.refresh_token:
-            credentials.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)
-            credentials = flow.run_local_server(port=0)
-        with open("token.json", "w") as token:
-            token.write(credentials.to_json())
-
-- These lines build a Google Sheets API service client and attempt to fetch values from the specified Google Sheet.
-    try:
-        service = build("sheets", "v4", credentials=credentials)
-        sheets = service.spreadsheets()
-        result = sheets.values().get(spreadsheetId=spreadsheet_id, range="Sheet1").execute()
-        values = result.get("values", [])
-
+  - We first create a file uploader widget in the web app, allowing the user to upload a CSV file.
+  - Then we  create a text input field for the user to enter a Google Sheet ID  
+  - Then the next few lines create interactive widgets for the user to select columns to drop, columns to not transform, fillna strategy, scaler choice, and encoder choice
+- The next section handles Google Sheets authentication. It checks if there's a token file and if not, it initiates the OAuth2 flow to obtain credentials. The credentials are stored in a token file for future use.  
+- The next lines build a Google Sheets API service client and attempt to fetch values from the specified Google Sheet.
 - Then we clear the existing data to upload the new data
-- These lines update the Google Sheet with the preprocessed data and display a success message.
-        sheets.values().update(
-            spreadsheetId=spreadsheet_id,
-            range=range_to_update,
-            valueInputOption="USER_ENTERED",
-            body={"values": values_to_update}
-        ).execute()
-        st.write("Data updated successfully")
-
+- Then we update the Google Sheet with the preprocessed data and display a success message.
 ### How to Use
 
 1. Run the script using the cmd by typing streamlit run name_of_file.py.
@@ -141,7 +104,7 @@ This function sets up the Streamlit web application and handles the main workflo
 3. Select preprocessing options.
 4. View the preprocessed data in the web app.
 5. Enter the Google Sheet ID and update the Google Sheet with the processed data.
-6. Finally after this you can see your preprocessed file uploaded to the google sheet
+6. Finally after this you can see your preprocessed file uploaded to the Google sheet
 
 This script provides an efficient way to preprocess and upload CSV data to Google Sheets for further analysis.
 
