@@ -102,7 +102,7 @@ This function sets up the Streamlit web application and handles the main workflo
 
 ### How to Use
 
-1. Run the script.
+1. Run the script using the cmd by typing streamlit run name_of_file.py.
 2. Upload a CSV file.
 3. Select preprocessing options.
 4. View the preprocessed data in the web app.
