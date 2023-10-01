@@ -58,4 +58,55 @@ We have a checklist at the bottom of this README file, which you should update a
 Feel free to check the discussions tab, you might get something of help there. Check out that tab before reaching out to us. Also, did you know, the internet is a great place to explore 😛
 
 ## Developer's Section
-*Add your video here, and your approach to the problem (optional). Leave some comments for us here if you want, we will be reading this :)*
+## CSV File Preprocessor and Uploader
+
+This Python script provides a web-based interface for uploading CSV files, performing data preprocessing, and updating a Google Sheet with the preprocessed data. It utilizes the Streamlit library for creating the web app and various data preprocessing techniques from scikit-learn.
+
+### Libraries Used
+
+- `sys`: Access system-specific parameters and functions.
+- `streamlit`: Create the web application.
+- `os`: Interact with the operating system.
+- `sklearn.preprocessing`: Perform data preprocessing tasks.
+- `google.auth.transport.requests`: Handle authentication requests.
+- `google.oauth2.credentials.Credentials`: Manage Google OAuth2 credentials.
+- `google_auth_oauthlib.flow.InstalledAppFlow`: Perform OAuth2 flow for installed applications.
+- `googleapiclient.discovery.build`: Create a Google Sheets service client.
+- `googleapiclient.errors.HttpError`: Handle HTTP errors.
+- `pandas`: Manipulate and read CSV data.
+- `numpy`: Perform numerical operations.
+
+### `preprocess_data` Function
+
+This function takes an input DataFrame, processes it based on user-defined parameters, and returns a preprocessed DataFrame. Key steps:
+
+- Drop specified columns from the DataFrame.
+- Remove duplicate rows.
+- Split the DataFrame into two parts: columns not to be transformed and columns to be transformed.
+- Fill missing values in numerical columns based on the chosen strategy.
+- Scale numerical columns based on the selected scaling method.
+- Encode categorical columns based on the chosen encoding method.
+- Re-add the columns that were not transformed back into the preprocessed DataFrame.
+
+### `main` Function
+
+This function sets up the Streamlit web application and handles the main workflow:
+
+- Configure Streamlit page settings.
+- Create a file uploader widget for CSV files.
+- Read the uploaded CSV file into a DataFrame.
+- Allow users to select columns to drop, columns not to transform, fillna strategy, scaler choice, and encoder choice.
+- Preprocess the data using the `preprocess_data` function.
+- Display the preprocessed DataFrame in the web app.
+- Handle Google Sheets authentication and update the Google Sheet with the preprocessed data.
+
+### How to Use
+
+1. Run the script.
+2. Upload a CSV file.
+3. Select preprocessing options.
+4. View the preprocessed data in the web app.
+5. Enter the Google Sheet ID and update the Google Sheet with the processed data.
+
+This script provides an efficient way to preprocess and upload CSV data to Google Sheets for further analysis.
+
